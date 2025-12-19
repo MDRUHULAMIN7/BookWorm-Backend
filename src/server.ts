@@ -9,6 +9,7 @@ async function main() {
       console.log(`Example app listening on port ${config.port}`);
     });
   } catch (error) {
-    console.log(error);
+    console.log('ruhul',error,'ruhul');
   }
 }
+main();

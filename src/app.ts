@@ -10,10 +10,10 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req: Request, res: Response) => {
-  const a = 100;
+const getAController = (req:Request,res:Response)=>{
+  res.send("Server is Running ....")
+}
 
-  res.send(a);
-});
+app.get('/',getAController);
 
 export default app;

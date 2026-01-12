@@ -45,7 +45,6 @@ export const registerUser = async (req: Request, res: Response) => {
 export const signInUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    console.log(email)
 
     // 1. check user exists
     const user = await User.findOne({ email }).select('+password');
@@ -80,7 +79,6 @@ export const signInUser = async (req: Request, res: Response) => {
     const userData = user.toObject();
     // delete userData?.password;
 
-    // 5. send response
     res.status(200).json({
       success: true,
       message: 'Login successful',

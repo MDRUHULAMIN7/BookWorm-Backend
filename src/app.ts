@@ -6,6 +6,7 @@ import express, {
 import cors from 'cors';
 import { UserRoutes } from './app/modules/user/user.routes.js';
 import { ReviewRoutes } from './app/modules/review/review.routes.js';
+import { GenreRoutes } from './app/modules/genre/genre.routes.js';
 const app: Application = express();
 
 //parser
@@ -15,6 +16,7 @@ app.use(cors());
 //application routes
 app.use('/api/v1/user', UserRoutes);
 app.use('/api/v1/review', ReviewRoutes);
+app.use('/api/v1/genre', GenreRoutes);
 
 
 

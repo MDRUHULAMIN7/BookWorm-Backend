@@ -6,6 +6,7 @@ const userSchema = new Schema<IUser>(
     name: {
       type: String,
       required: [true, 'Name is required'],
+      maxlength: [20, 'Name cannot be more than 20 characters'],
     },
     email: {
       type: String,
@@ -15,27 +16,17 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: [true, 'Password is required'],
+      minlength: [6, 'Password cannot be less than 6 characters'],
     },
-    gender: {
+    photo: {
       type: String,
-      enum: ['male', 'female', 'others'],
-      required: [true, 'Gender is required'],
+      required: [true, 'User Photo is required'],
     },
-    profileImg: {
+    role: {
       type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
     },
-    token: {
-      type: String,
-      default: null,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    resetPasswordToken: { type: String, required: [false] },
-    resetPasswordExpire: { type: Date, required: [false] },
-    resetPasswordOtp: { type: String, required: [false] },
-    resetPasswordOtpExpire: { type: Date, required: [false] },
   },
   {
     timestamps: false,

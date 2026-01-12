@@ -6,6 +6,4 @@ import mongoose from 'mongoose';
 mongoose.connect(config.database_url as string)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
-
-// Export the Express app for Vercel serverless
 export default app;

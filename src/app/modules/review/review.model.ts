@@ -1,21 +1,18 @@
-import mongoose, { Schema, Document } from "mongoose";
+import { Schema, model, } from "mongoose";
+import type { IReview } from "./review.interface.js";
 
-export interface IReview extends Document {
-  college: mongoose.Schema.Types.ObjectId;
-  user: mongoose.Schema.Types.ObjectId;
-  rating: number;
-  comment: string;
-  createdAt: Date;
-}
 
 const reviewSchema = new Schema<IReview>(
   {
-    college: { type: Schema.Types.ObjectId, ref: "College", required: true },
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    bookId: { type: Schema.Types.ObjectId, ref: "Book", required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
-    comment: { type: String, required: true },
+    comment: { type: String, required: true, trim: true },
+    status: { type: String, enum: ['pending', 'approved'], default: 'pending' },
   },
-  { timestamps: true }
+  { timestamps: true } 
 );
 
-export default mongoose.model<IReview>("Review", reviewSchema);
+const Review = model<IReview>("Review", reviewSchema);
+
+export default Review;

@@ -1,72 +1,131 @@
+import type{ Request, Response } from "express";
+import { Types } from "mongoose";
+import Review from "./review.model.js";
 
-import Review from "./review.model.js"; 
-import type { Request, Response } from "express";
-
-// Create a new review
-export const createReview = async (req: Request, res: Response) => {
+//  Add Review
+export const addReview = async (req: Request, res: Response) => {
   try {
-    const { collegeId, userId, rating, comment } = req.body;
-    const alreadyReviewed = await Review.findOne({ college: collegeId, user: userId });
-    if (alreadyReviewed) {
+    const { bookId, rating, comment } = req.body;
+    const userId = req.params.id; 
+
+    if (!bookId || !rating || !comment) {
+      return res.status(400).json({ success: false, message: "All fields are required." });
+    }
+
+    const newReview = await Review.create({
+      userId,
+      bookId,
+      rating,
+      comment,
+      status: "pending", // default
+    });
+
+    res.status(201).json({ success: true, data: newReview });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message:err.message ||  "Failed to add review." });
+  }
+};
+
+//  Get Approved Reviews by Book ID
+export const getApprovedReviewsByBook = async (req: Request, res: Response) => {
+  try {
+    const  bookId = req.params.id;
+
+    if (!Types.ObjectId.isValid(bookId)) {
+      return res.status(400).json({ success: false, message: "Invalid book ID." });
+    }
+
+    const reviews = await Review.find({ bookId, status: "approved" })
+      .populate("userId", "name photo") // get user info
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, data: reviews });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message:err.message ||  "Failed to fetch reviews." });
+  }
+};
+
+//update reviews status
+export const updateReviewStatus = async (req: Request, res: Response) => {
+  try {
+    const { status,reviewId } = req.body;
+    if (!Types.ObjectId.isValid(reviewId)) {
       return res.status(400).json({
         success: false,
-        message: "You have already added a review for this college",
+        message: "Invalid review ID",
       });
     }
 
-    const review = await Review.create({
-      college: collegeId,
-      user: userId,
-      rating,
-      comment,
-    });
+    const allowedStatus = ["pending", "approved"];
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value",
+      });
+    }
 
-    res.status(201).json({
+    const review = await Review.findByIdAndUpdate(
+      reviewId,
+      { status },
+      { new: true }
+    );
+
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    res.status(200).json({
       success: true,
-      message: "Review submitted successfully",
+      message: `Review status updated to ${status}`,
       data: review,
     });
-  } catch (error: any) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "Failed to submit review",
-      error: error.message,
+      message: err.message || "Failed to update review status",
     });
   }
 };
 
-
-
+//get all reviews
 export const getAllReviews = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;      
-    const limit = parseInt(req.query.limit as string) || 20;   
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const total = await Review.countDocuments();
+    const filter: any = {};
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
 
-    const reviews = await Review.find()
-      .populate("college", "name image")
-      .populate("user", "name") 
-      .sort({ createdAt: -1 })           
-      .skip(skip)
-      .limit(limit);
+    const [reviews, total] = await Promise.all([
+      Review.find(filter)
+        .populate("userId", "name email photo")
+        .populate("bookId", "title author coverImage")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Review.countDocuments(filter),
+    ]);
 
     res.status(200).json({
       success: true,
-      data: reviews,
       meta: {
         total,
         page,
         limit,
         totalPages: Math.ceil(total / limit),
       },
+      data: reviews,
     });
-  } catch (error: any) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch reviews",
+      message: err.message || "Failed to fetch reviews",
     });
   }
 };
-

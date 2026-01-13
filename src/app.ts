@@ -13,7 +13,9 @@ const app: Application = express();
 
 //parser
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://book-worm-frontend-cyan.vercel.app', 'http://localhost:3000']
+}));
 
 //application routes
 app.use('/api/v1/user', UserRoutes);

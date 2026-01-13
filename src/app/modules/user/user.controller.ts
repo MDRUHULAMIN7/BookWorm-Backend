@@ -2,7 +2,6 @@ import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from './user.model.js';
 import bcrypt from 'bcryptjs';
-// Adjust path based on your structure
 
 // REGISTER
 

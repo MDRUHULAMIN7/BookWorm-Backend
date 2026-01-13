@@ -129,3 +129,35 @@ export const getAllReviews = async (req: Request, res: Response) => {
     });
   }
 };
+
+//delete review 
+export const deleteReviewById = async (req: Request, res: Response) => {
+  try {
+    const reviewId  = req.params.id;
+    if (!Types.ObjectId.isValid(reviewId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid review ID",
+      });
+    }
+
+    const review = await Review.findByIdAndDelete(reviewId);
+
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Review deleted successfully",
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Failed to delete review",
+    });
+  }
+};

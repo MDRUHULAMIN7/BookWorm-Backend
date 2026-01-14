@@ -8,7 +8,8 @@ const tutorialSchema: Schema<ITutorial> = new Schema({
 
   videoUrl:
    { type: String, required: true },
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  createdBy:
+   { type: Schema.Types.ObjectId, ref: 'User', required: true },
 },
   { timestamps: true } 
 );

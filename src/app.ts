@@ -29,7 +29,7 @@ app.use('/api/v1/tutorial', TutorialRoutes);
 
 
 const getAController = (req: Request, res: Response) => {
-  res.send('College Seeker  Server is Running ....');
+  res.send('Book Worm  Server is Running ....');
 };
 
 app.get('/', getAController);

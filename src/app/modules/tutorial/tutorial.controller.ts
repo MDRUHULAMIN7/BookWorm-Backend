@@ -43,7 +43,7 @@ export const createTutorial = async (req: Request, res: Response) => {
     });
   }
 };
-//GET ALL TUTORIALS 
+//GET ALL TUTORIALS by id
 export const getAllTutorials = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;

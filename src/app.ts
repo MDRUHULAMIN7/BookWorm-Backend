@@ -77,7 +77,7 @@ app.use('/api/v1/tutorial', TutorialRoutes);
 
 // health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'BookWorm backend running 🚀' });
+  res.json({ success: true, message: 'BookWorm backend running ' });
 });
 
 export default app;

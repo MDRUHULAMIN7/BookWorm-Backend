@@ -10,6 +10,9 @@ It provides secure authentication, role-based authorization, and RESTful APIs fo
 ## 🌐 Live API
 🔗 **Server URL:** https://book-worm-backend-seven.vercel.app
 
+## Postman Api Workspace Link ( to test api in live ) 
+
+https://ruhulthisis-7630125.postman.co/workspace/Ruhul-Amin's-Workspace~f106ed4b-69b0-48b9-8f89-f285e8fc3017/collection/47724175-3c38a325-9719-4750-8c96-64835f211e19?action=share&creator=47724175&active-environment=47724175-ef72f0fb-c5f5-4973-98e4-6747dd6c2320
 ---
 
 ## ⚙️ Tech Stack
